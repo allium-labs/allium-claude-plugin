@@ -1,0 +1,21 @@
+{
+  "name": "allium-labs",
+  "description": "Allium's official Claude Code plugins for blockchain data across 150+ chains.",
+  "owner": {
+    "name": "Allium Labs",
+    "url": "https://www.allium.so/"
+  },
+  "plugins": [
+    {
+      "name": "allium",
+      "source": "./",
+      "category": "database",
+      "description": "Query blockchain data across 150+ chains with Allium. Search schemas, run SQL, read live prices and balances, and build Explorer queries, charts, and dashboards.",
+      "author": {
+        "name": "Allium Labs",
+        "url": "https://www.allium.so/"
+      },
+      "homepage": "https://www.allium.so/"
+    }
+  ]
+}
