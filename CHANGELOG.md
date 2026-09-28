@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1]
+
+### Changed
+
+- Allium MCP server moved to `https://mcp.allium.so`. `https://mcp-oauth.allium.so`
+  stops working after 31 October 2026.
+
 ## [0.1.0]
 
 ### Added
