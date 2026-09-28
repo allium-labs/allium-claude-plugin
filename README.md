@@ -15,7 +15,7 @@ data correctly the first time.
 
 ### Allium MCP server
 
-The plugin connects to Allium's hosted MCP server at `https://mcp-oauth.allium.so` over
+The plugin connects to Allium's hosted MCP server at `https://mcp.allium.so` over
 OAuth. You are prompted to sign in on first use. Register at
 [app.allium.so](https://app.allium.so/) if you do not have an account.
 
