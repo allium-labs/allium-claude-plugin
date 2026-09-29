@@ -38,18 +38,21 @@ description: |
 model: inherit
 color: purple
 tools:
-  - mcp__allium__get_skill
-  - mcp__allium__search_terminal
-  - mcp__allium__get_terminal_results
-  - mcp__allium__list_explorer_queries
-  - mcp__allium__get_explorer_query
-  - mcp__allium__run_explorer_query
-  - mcp__allium__get_query_run_results
-  - mcp__allium__set_dashboard
-  - mcp__allium__read_dashboard
-  - mcp__allium__share_dashboard
-  - mcp__allium__create_explorer_visual
-  - mcp__allium__get_explorer_visual
+  - mcp__plugin_allium_allium__get_skill
+  - mcp__plugin_allium_allium__search_terminal
+  - mcp__plugin_allium_allium__get_terminal_results
+  - mcp__plugin_allium_allium__search_dashboards
+  - mcp__plugin_allium_allium__list_explorer_queries
+  - mcp__plugin_allium_allium__get_explorer_query
+  - mcp__plugin_allium_allium__run_explorer_query
+  - mcp__plugin_allium_allium__get_query_run_results
+  - mcp__plugin_allium_allium__set_dashboard
+  - mcp__plugin_allium_allium__read_dashboard
+  - mcp__plugin_allium_allium__share_dashboard
+  - mcp__plugin_allium_allium__create_explorer_visual
+  - mcp__plugin_allium_allium__get_explorer_visual
+  - mcp__plugin_allium_allium__list_query_schedules
+  - mcp__plugin_allium_allium__set_query_schedules
   - Read
 ---
 
@@ -105,6 +108,10 @@ will bind to. Read the fields, not just the titles.
 
 **6. Verify.** Call `read_dashboard` and confirm the structure, then report what you built.
 
+**7. Schedule, if asked.** To keep the dashboard fresh, call `list_query_schedules`, then
+`set_query_schedules` with the `dashboard_id` and a 5-field UTC cron. Each scheduled run
+uses EUs, so confirm the cron with the user before you set it.
+
 ## Requirements
 
 Every dashboard must have:
@@ -149,7 +156,8 @@ Gaps: [queries that would improve this but do not exist yet, or "none"]
   private copy is genuinely wanted before building one.
 - **Query has no time dimension** — skip time series entirely and build around comparison
   and ranking instead of faking a trend.
-- **Updating an existing dashboard** — `read_dashboard` first. Upsert into the existing
+- **Updating an existing dashboard** — find it with `search_dashboards` (never
+  `search_terminal`, which only covers public Terminal dashboards), then `read_dashboard`. Upsert into the existing
   tree; do not rebuild it and orphan the old one.
 - **An element's config is rejected** — re-fetch that element's schema with
   `reference_title` and match field casing exactly rather than guessing a variant.

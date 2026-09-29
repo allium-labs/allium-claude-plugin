@@ -1,7 +1,7 @@
 # Allium Plugin for Claude Code
 
 A Claude Code plugin that gives an agent live access to [Allium](https://www.allium.so/)'s
-blockchain data across 150+ chains, together with the skills that teach it to query that
+blockchain data across 135+ chains, together with the skills that teach it to query that
 data correctly the first time.
 
 ## Install
@@ -16,7 +16,8 @@ data correctly the first time.
 ### Allium MCP server
 
 The plugin connects to Allium's hosted MCP server at `https://mcp.allium.so` over
-OAuth. You are prompted to sign in on first use. Register at
+OAuth. You are prompted to sign in on first use. To use an API key instead, send it as
+`Authorization: Bearer <api_key>`. Register at
 [app.allium.so](https://app.allium.so/) if you do not have an account.
 
 The server provides tools to:
@@ -24,6 +25,8 @@ The server provides tools to:
 - Search schemas and documentation
 - Run SQL and fetch results
 - Create, read, and update Explorer queries, visuals, and dashboards
+- Schedule Explorer query refreshes
+- Read curated metrics from the metrics catalog, where your plan includes it
 - Browse public Terminal dashboards
 - Query Realtime prices, balances, positions, and transactions
 
@@ -53,6 +56,7 @@ time, because those schemas are generated from live API models.
 | `sql-expert` | Write and optimize queries with joins, CTEs, and window functions |
 | `docs-expert` | Answer questions on data models, schemas, and API usage |
 | `dashboard-builder` | Build a dashboard from existing Explorer queries |
+| `realtime-expert` | Read live prices, balances, P&L, and Hyperliquid data |
 
 ### Commands
 
@@ -110,8 +114,8 @@ comparison, and builds the dashboard with every number bound to a `query_id`.
 
 > "What's the current USDC balance of this wallet across every chain it's active on?"
 
-Uses the Realtime endpoints for balances and prices instead of querying historical
-tables.
+Uses the `realtime-expert` agent and the Realtime balance and price endpoints instead of
+querying historical tables.
 
 **Example 8: Choose a product**
 
@@ -126,7 +130,7 @@ Compares the products on their actual latency and delivery characteristics.
 .claude-plugin/marketplace.json   Marketplace entry, for direct installs
 .mcp.json                         Allium MCP server
 skills/                           11 skills
-agents/                           3 agents
+agents/                           4 agents
 commands/                         /allium-query
 ```
 
