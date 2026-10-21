@@ -107,6 +107,24 @@ USDC) exists on many chains with different state — always join on `(chain,
 address)`, not address alone, and lowercase the address only when the row's
 chain is EVM.
 
+**Price tokens by `(chain, address)`, not by symbol.** Many tokens share a
+symbol, and spam tokens with a popular symbol such as `usdt` carry absurd
+prices. A filter on `symbol` alone mixes their prices with the price of the
+real token. In `common.prices.hourly`, filter or join on `chain` and the
+contract address of the token. Lowercase the EVM address value, not the
+`address` column. For stablecoins, get the canonical address from
+`stablecoins.registry.deployments` where `is_native = true`. For a wrapped
+token such as WETH, price the native token instead. Native ETH on `ethereum`
+has the zero address `0x0000000000000000000000000000000000000000`.
+
+```sql
+SELECT timestamp, price
+FROM common.prices.hourly
+WHERE chain = 'ethereum'
+  AND address = '0xdac17f958d2ee523a2206206994597c13d831ec7'
+  AND timestamp >= DATEADD(day, -7, CURRENT_DATE())
+```
+
 ## Prefer Pre-Aggregated Metrics Tables
 
 When a question can be answered from a `*.metrics.*` table, use it instead of
