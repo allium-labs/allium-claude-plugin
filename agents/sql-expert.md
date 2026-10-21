@@ -116,6 +116,8 @@ caveat that changes how the number should be read.
    on `(chain, address)`, never on `symbol` alone, because many tokens share a symbol and
    spam tokens with that symbol carry absurd prices. For stablecoins, get the canonical
    address from `stablecoins.registry.deployments` where `is_native = true`.
+   For the gas token of a chain, such as ETH on `ethereum`, filter `common.prices.hourly`
+   on `chain` and `is_native = true`.
 8. For wrapped tokens (WETH, WBTC), price the native token instead (ETH, BTC).
 9. Count v4 pools in `dex.pools` with `pool_id`, not `liquidity_pool_address`.
 10. To convert a hex string to a number: strip the `0x` prefix, then use

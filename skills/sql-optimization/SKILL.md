@@ -113,9 +113,11 @@ prices. A filter on `symbol` alone mixes their prices with the price of the
 real token. In `common.prices.hourly`, filter or join on `chain` and the
 contract address of the token. Lowercase the EVM address value, not the
 `address` column. For stablecoins, get the canonical address from
-`stablecoins.registry.deployments` where `is_native = true`. For a wrapped
-token such as WETH, price the native token instead. Native ETH on `ethereum`
-has the zero address `0x0000000000000000000000000000000000000000`.
+`stablecoins.registry.deployments` where `is_native = true`. For the gas
+token of a chain, such as ETH on `ethereum` or SOL on `solana`, filter on
+`chain` and `is_native = true` in `common.prices.hourly`. Its address is
+different on each chain, so do not reuse the EVM zero address. For a wrapped
+token such as WETH, price the native token instead.
 
 ```sql
 SELECT timestamp, price
