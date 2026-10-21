@@ -116,6 +116,8 @@ caveat that changes how the number should be read.
    on `(chain, address)`, never on `symbol` alone, because many tokens share a symbol and
    spam tokens with that symbol carry absurd prices. For stablecoins, get the canonical
    address from `stablecoins.registry.deployments` where `is_native = true`.
+   If a chain has only bridged deployments, such as USDT on `arbitrum` or `bsc`,
+   select the bridged row by `product_id`. Never go back to a filter on `symbol`.
    For the gas token of a chain, such as ETH on `ethereum`, filter `common.prices.hourly`
    on `chain` and `is_native = true`.
 8. For wrapped tokens (WETH, WBTC), price the native token instead (ETH, BTC).

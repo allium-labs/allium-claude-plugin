@@ -112,12 +112,17 @@ symbol, and spam tokens with a popular symbol such as `usdt` carry absurd
 prices. A filter on `symbol` alone mixes their prices with the price of the
 real token. In `common.prices.hourly`, filter or join on `chain` and the
 contract address of the token. Lowercase the EVM address value, not the
-`address` column. For stablecoins, get the canonical address from
-`stablecoins.registry.deployments` where `is_native = true`. For the gas
-token of a chain, such as ETH on `ethereum` or SOL on `solana`, filter on
-`chain` and `is_native = true` in `common.prices.hourly`. Its address is
-different on each chain, so do not reuse the EVM zero address. For a wrapped
-token such as WETH, price the native token instead.
+`address` column. For stablecoins, get the address from
+`stablecoins.registry.deployments`. Use the row where `is_native = true`,
+which is the deployment of the issuer. Some chains have only bridged
+deployments, such as USDT on `arbitrum`, `polygon`, and `bsc`. On those
+chains, select the bridged row by `product_id`, such as `usdt0_layerzero` or
+`usdt_binance_peg`. Do not go back to a filter on `symbol`. For the gas token
+of a chain, such as ETH on `ethereum` or SOL on `solana`, filter on `chain`
+and `is_native = true` in `common.prices.hourly`. Do not use one fixed
+address for all chains, because the gas token address is different on some
+chains, such as `zksync` and `solana`. For a wrapped token such as WETH,
+price the native token instead.
 
 ```sql
 SELECT timestamp, price
