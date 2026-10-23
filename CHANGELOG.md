@@ -1,5 +1,15 @@
 # Changelog
 
+## [0.1.3]
+
+### Fixed
+
+- `sql-expert` and `sql-optimization` price tokens by `(chain, address)`, not by symbol.
+  Spam tokens share symbols such as `usdt` and carry absurd prices.
+- `sql-optimization` is a copy of the MCP-served skill again. It drops the tables that do not
+  exist (`*.raw.transfers`, `ethereum.metrics.dex_overview`) and adds the literal-date pruning,
+  `FLATTEN` and rolling-window rules.
+
 ## [0.1.2]
 
 ### Added

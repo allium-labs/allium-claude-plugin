@@ -1,7 +1,7 @@
 {
   "name": "allium",
   "displayName": "Allium",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Query blockchain data across 135+ chains with Allium. Search schemas, run SQL, read live prices and balances, and build Explorer queries, charts, and dashboards.",
   "author": {
     "name": "Allium Labs",
