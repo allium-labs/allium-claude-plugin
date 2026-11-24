@@ -1,5 +1,22 @@
 # Changelog
 
+## [0.1.3]
+
+### Added
+
+- `icon` and `privacyPolicyUrl` in `plugin.json` for the directory listing.
+- `sql-expert` can list a query's past runs and share an Explorer query.
+
+### Removed
+
+- The `realtime-expert` agent and the Realtime tool from `docs-expert`.
+- The API-key setup from the README. The plugin signs in with OAuth only.
+
+### Fixed
+
+- `product-guide`, its supported-chains list, and `sql-optimization` match the skills the
+  Allium MCP server serves.
+
 ## [0.1.2]
 
 ### Added

@@ -1,24 +1,27 @@
 ---
 name: product-guide
 description: |
-  Guide to Allium's four core products: Explorer, Realtime APIs, Datastreams,
-  and Datashares. Explains what each product does, who it's for, and how to
-  choose the right one for a customer's use case.
+  Guide to Allium's five core products: Explorer, Datashares, Realtime APIs,
+  Datastreams, and Beam. Explains what each product does, who it's for, and how
+  to choose the right one for a customer's use case. Also covers Nodes and the
+  Allium MCP server.
 
   Read this skill when a customer asks about Allium's products, wants to
   understand the difference between them, needs help choosing a product, or
   asks questions like "which product should I use?" or "what does Allium offer?"
-  It also carries the canonical, dated list of supported blockchains — read it
-  for any "what chains / how many chains does Allium support?" question and cite
-  that list instead of answering from memory.
+  It also carries the canonical, dated list of supported blockchains. Read it
+  before naming, listing, or counting the chains Allium supports, including
+  requests for a few examples ("list 3 chains Allium supports"), and cite that
+  list instead of answering from memory.
 ---
 
 # Allium Product Guide
 
-Allium offers four core products for accessing blockchain data. Each serves a
+Allium offers five core products for accessing blockchain data. Each serves a
 different access pattern, latency requirement, and integration style. Explorer,
 Datashares, and Datastreams share one historical data platform; the Realtime
-APIs serve a smaller, separate set of chains.
+APIs serve a smaller, separate set of chains. Beam runs on a subset of
+Datastreams sources, listed in the Beam docs.
 
 > **Answering "what chains does Allium support?" (grounding rule)**
 >
@@ -26,19 +29,31 @@ APIs serve a smaller, separate set of chains.
 > generating them from memory produces unstable totals and invented chains.
 >
 > 1. Fetch the **Allium Supported Chains — Canonical List** reference file (see
->    "Reference files" below) and quote it. For an up-to-the-minute Realtime
->    figure, call the `get_realtime_supported_chains` tool.
+>    "Reference files" below) and quote it.
 > 2. Always say **which product** a count refers to — the historical data
 >    platform (Explorer / Datashares / Datastreams) and the Realtime APIs have
 >    different totals.
-> 3. The headline total must equal the number of rows for that product in the
->    canonical list. Do not round to a vague "80+/130+/150+" — cite the exact
+> 3. The headline total must equal the number of chains for that product in
+>    its source (see step 4). Do not round to a vague "80+/130+/150+" — cite the exact
 >    count and state the list's snapshot date in the answer, so a reader can see
 >    how current it is (e.g. "**[N]** chains on the historical data platform, as
 >    of **[snapshot date]**"). Pull both **[N]** and the date from the fetched
 >    reference file — never from this instruction or from memory.
-> 4. If a chain is not in the canonical list, say it is not currently supported
->    rather than guessing.
+> 4. When you list a product's chains, list every chain from its source: the
+>    product's table in the canonical list, or the live tool for Realtime (see
+>    step 5). Never shorten the list to "and others" or "including". The
+>    number of chains you name must equal the count you state.
+> 5. The Realtime table is a dated snapshot. For any Realtime question, call the
+>    `get_realtime_supported_chains` tool when it is available. It maps each
+>    endpoint to its chains, so the Realtime roster is every chain that appears
+>    under any endpoint. If it disagrees with the snapshot, the tool wins, and
+>    the answer names the snapshot date it differs from. Fall back to the
+>    snapshot only when the tool is unavailable.
+> 6. End any Realtime answer with this caveat: the Realtime roster changes over
+>    time, so confirm it at <https://docs.allium.so/api/developer/availability>.
+> 7. If a chain is in the canonical list's deprecated table, say it is
+>    deprecated. If it is in neither the canonical list nor the live tool's
+>    result, say it is not currently supported rather than guessing.
 
 ## Product Overview
 
@@ -46,12 +61,13 @@ APIs serve a smaller, separate set of chains.
 | ----------------- | ----------------------------------- | -------------------------------------- | -------------------------- | --------------------------------------------------- |
 | **Explorer**      | SQL queries via web UI or API       | ~1 hour freshness, ~4-5s query time    | Query compute time         | Ad-hoc analysis, dashboards, research               |
 | **Realtime APIs** | REST API (pull)                     | 50-100ms response, 3-5s data freshness | API call volume            | Application backends, wallets, trading UIs          |
-| **Datastreams**   | Push via Kafka/PubSub/SNS/WebSocket | 3-5s data freshness                    | Data destinations & egress | Event-driven architectures, real-time pipelines     |
+| **Datastreams**   | Push via Kafka/PubSub/WebSocket | 3-5s data freshness                    | Data destinations & egress | Event-driven architectures, real-time pipelines     |
+| **Beam**          | Filtered push via Kafka/NATS/webhook | P50 under 2s data freshness            | Pipeline + consumption     | Notifications, monitoring, and alerting             |
 | **Datashares**    | Native tables in your warehouse     | 1-3 hours batch, sub-minute streaming  | Number of chains & schemas | Institutional analytics, joining with internal data |
 
 ## Explorer
 
-**What it is:** A SQL-based analytics workspace at `app.allium.so/explorer` that
+**What it is:** A SQL-based analytics workspace at `app.allium.so/analyze/queries` that
 lets users query, visualize, and share blockchain data across every chain on the
 historical data platform (see the canonical chain list for the exact count). Powered
 by Snowflake (OLAP).
@@ -63,9 +79,9 @@ by Snowflake (OLAP).
 - Interactive chart builder with public sharing and embed links
 - CSV and API data upload — join your own data with on-chain data
 - Parameterized queries for reusable, dynamic SQL
-- AI Assistant for natural-language-to-SQL
+- AI Assistant (Ask Allium) that turns plain-English questions into SQL, charts, and dashboards. It also saves prompts as custom skills
 - Explorer API — programmatic query lifecycle (create, run, fetch results, cancel)
-- Curated metrics dashboards for stablecoins, DEXs, bridges, etc.
+- Terminal (`app.allium.so/terminal`), a library of public dashboards built by Allium analysts for stablecoins, DEXs, bridges, and more
 
 **Target users:**
 
@@ -147,14 +163,9 @@ guaranteed delivery.
 
 **Key capabilities:**
 
-- Delivery via **Kafka**, **Google Cloud Pub/Sub**, **Amazon SNS** (coming soon), **WebSockets**, and **webhooks**
+- Delivery via **Kafka**, **Google Cloud Pub/Sub**, **WebSockets**, and **webhooks**
 - Guaranteed delivery and message ordering (Kafka/PubSub)
 - Historical replay via retention policies
-- **Stream Transformations** — managed filter-and-route pipelines:
-  - Data source filters (dynamic address/contract lists, updateable without restart)
-  - Declarative JSON filters with `=`, `!=`, `>`, `<`, `in`, `exists`, `AND`/`OR`
-  - Workflows: `source → filter → destination`
-- **Beam** (custom transforms) — JavaScript v8 transforms and redis set filters on any stream, with Kafka, SNS, external Kafka, webhook and NATS JetStream sinks. See `beam-pipelines` skill for details
 - Compression (lz4, zstd, gzip)
 - WebSocket streaming of all Kafka topics for simpler integration
 
@@ -179,6 +190,21 @@ guaranteed delivery.
 - Needs custom transformations on streaming data (→ Beam)
 - Wants data pushed rather than polling an API
 
+## Beam
+
+**What it is:** Filtered, transformed realtime streams built on Datastreams, with
+no stream infrastructure to run. Customers build a pipeline in the Allium App or
+the Beam API: pick a Datastream source, filter and transform records with
+JavaScript, and deliver only the matching events to Kafka, NATS JetStream, a
+webhook, or their own Kafka cluster. The assistant cannot design or deploy one;
+point the user to the Allium App.
+
+**When to recommend Beam:**
+
+- Wallet notifications, transaction or protocol monitoring, or compliance alerts
+- Customer wants to receive only the events that match their filters
+- Customer has no streaming infrastructure of their own to filter and route a Datastream
+
 ## Datashares
 
 **What it is:** Managed delivery of production-ready blockchain data as native
@@ -188,7 +214,7 @@ ingestion, incremental updates, schema migrations, reorg handling, and data qual
 **Key capabilities:**
 
 - **Snowflake** — native Data Shares (zero-copy). Primary region: GCP US Central 1. Worldwide delivery with 3-hour freshness
-- **BigQuery** — via Google Analytics Hub. Regions: US Central 1, EU West 2
+- **BigQuery** — via BigQuery Analytics Hub. Regions: US Central 1, EU West 2
 - **Databricks** — via Delta Sharing. Sub-minute streaming available. Recommended: AWS us-east-2
 - **Amazon S3** / **Google Cloud Storage** — Iceberg format data dumps
 - Apache Iceberg table format with backward-compatible schema evolution
@@ -218,6 +244,15 @@ ingestion, incremental updates, schema migrations, reorg handling, and data qual
 - Needs petabyte-scale historical data for backtesting or research
 - Compliance, audit, or accounting use cases at institutions
 
+## Other ways to access Allium
+
+- **Nodes:** direct peer access to the blockchain nodes Allium runs, for raw,
+  unindexed data at the lowest latency. The Hyperliquid sentry peer is available
+  today. Customers contact sales for access.
+- **Allium MCP server:** `https://mcp.allium.so` gives Claude, ChatGPT, Cursor,
+  and other agents Allium's data tools: schema and docs search, SQL,
+  dashboards, Terminal, and realtime data.
+
 ## How to Choose the Right Product
 
 ### Decision Framework
@@ -228,6 +263,7 @@ ingestion, incremental updates, schema migrations, reorg handling, and data qual
 2. **"I'm building an app and need to fetch data on demand"** → **Realtime APIs**
 3. **"I need data pushed to my systems in real-time"** → **Datastreams**
 4. **"I want blockchain data in my own warehouse"** → **Datashares**
+5. **"I want only the events I care about pushed to me, with no stream infrastructure"** → **Beam**
 
 ### By Use Case
 
@@ -241,7 +277,7 @@ ingestion, incremental updates, schema migrations, reorg handling, and data qual
 | Portfolio PnL in a consumer product                 | Realtime APIs        |
 | Real-time alerts on smart contract events           | Datastreams          |
 | Streaming DEX trades to an analytics pipeline       | Datastreams          |
-| Custom filtered feeds (specific wallets, contracts) | Datastreams (+ Beam) |
+| Custom filtered feeds (specific wallets, contracts) | Beam                 |
 | Institutional-grade historical analytics            | Datashares           |
 | Joining on-chain + internal data for compliance     | Datashares           |
 | ML model training on blockchain data                | Datashares           |
@@ -277,11 +313,12 @@ Many customers use multiple products together:
 
 ### Pricing Comparison
 
-| Product       | Model                 | Implication                                        |
-| ------------- | --------------------- | -------------------------------------------------- |
-| Explorer      | Query compute time    | Cost scales with query complexity and frequency    |
-| Realtime APIs | API call volume       | Cost scales with request volume                    |
-| Datastreams   | Destinations & egress | Cost scales with number of streams and data volume |
-| Datashares    | Chains & schemas      | Predictable cost based on data coverage selected   |
+| Product       | Model                  | Implication                                        |
+| ------------- | ---------------------- | -------------------------------------------------- |
+| Explorer      | Query compute time     | Cost scales with query complexity and frequency    |
+| Realtime APIs | API call volume        | Cost scales with request volume                    |
+| Datastreams   | Destinations & egress  | Cost scales with number of streams and data volume |
+| Beam          | Pipeline + consumption | Cost scales with deployed pipelines and usage      |
+| Datashares    | Chains & schemas       | Predictable cost based on data coverage selected   |
 
-All products require contacting Allium for specific pricing. Customers can sign up for a free trial at `app.allium.so/join` for API access, or book a demo for enterprise needs.
+Organizations on an Allium Subscription plan see their plan, usage, invoices, and overage settings at Settings > Billing. The Explorer API is enterprise-only, and Beam and Nodes need access from the Allium team. Customers can sign up for a free trial at `app.allium.so/join` for API access, or book a demo for enterprise needs.

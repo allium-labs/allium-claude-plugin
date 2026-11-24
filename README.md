@@ -16,19 +16,18 @@ data correctly the first time.
 ### Allium MCP server
 
 The plugin connects to Allium's hosted MCP server at `https://mcp.allium.so` over
-OAuth. You are prompted to sign in on first use. To use an API key instead, send it as
-`Authorization: Bearer <api_key>`. Register at
+OAuth. You are prompted to sign in on first use. Register at
 [app.allium.so](https://app.allium.so/) if you do not have an account.
 
 The server provides tools to:
 
 - Search schemas and documentation
 - Run SQL and fetch results
-- Create, read, and update Explorer queries, visuals, and dashboards
+- Create, read, update, delete, and share Explorer queries, visuals, and dashboards
+- List the past runs of a query
 - Schedule Explorer query refreshes
 - Read curated metrics from the metrics catalog, where your plan includes it
 - Browse public Terminal dashboards
-- Query Realtime prices, balances, positions, and transactions
 
 ### Skills
 
@@ -56,7 +55,6 @@ time, because those schemas are generated from live API models.
 | `sql-expert` | Write and optimize queries with joins, CTEs, and window functions |
 | `docs-expert` | Answer questions on data models, schemas, and API usage |
 | `dashboard-builder` | Build a dashboard from existing Explorer queries |
-| `realtime-expert` | Read live prices, balances, P&L, and Hyperliquid data |
 
 ### Commands
 
@@ -110,14 +108,7 @@ caveats stated.
 Reads the existing Explorer queries, works out which one supports head-to-head
 comparison, and builds the dashboard with every number bound to a `query_id`.
 
-**Example 7: Read live data**
-
-> "What's the current USDC balance of this wallet across every chain it's active on?"
-
-Uses the `realtime-expert` agent and the Realtime balance and price endpoints instead of
-querying historical tables.
-
-**Example 8: Choose a product**
+**Example 7: Choose a product**
 
 > "We need onchain balances in our app with sub-second latency. Explorer or Realtime?"
 
@@ -130,7 +121,7 @@ Compares the products on their actual latency and delivery characteristics.
 .claude-plugin/marketplace.json   Marketplace entry, for direct installs
 .mcp.json                         Allium MCP server
 skills/                           11 skills
-agents/                           4 agents
+agents/                           3 agents
 commands/                         /allium-query
 ```
 

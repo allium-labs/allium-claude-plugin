@@ -46,12 +46,14 @@ tools:
   - mcp__plugin_allium_allium__get_catalog_metric
   - mcp__plugin_allium_allium__run_sql_query
   - mcp__plugin_allium_allium__get_query_run_results
+  - mcp__plugin_allium_allium__list_query_runs
   - mcp__plugin_allium_allium__list_compute_profiles
   - mcp__plugin_allium_allium__create_explorer_query
   - mcp__plugin_allium_allium__update_explorer_query
   - mcp__plugin_allium_allium__list_explorer_queries
   - mcp__plugin_allium_allium__get_explorer_query
   - mcp__plugin_allium_allium__run_explorer_query
+  - mcp__plugin_allium_allium__share_explorer_query
   - mcp__plugin_allium_allium__list_query_schedules
   - mcp__plugin_allium_allium__set_query_schedules
   - Read
