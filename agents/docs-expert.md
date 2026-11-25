@@ -56,7 +56,6 @@ tools:
   - mcp__plugin_allium_allium__search_terminal
   - mcp__plugin_allium_allium__get_terminal_results
   - mcp__plugin_allium_allium__list_catalog_metrics
-  - mcp__plugin_allium_allium__get_realtime_supported_chains
   - Read
 ---
 
@@ -86,7 +85,6 @@ the same concept. Two or three searches is normal.
 | Which product should we use? | `product-guide` |
 | Which table for this analysis? | `data-matching` |
 | Is there a ready-made metric? | `list_catalog_metrics` (when available) |
-| Which chains does a Realtime endpoint support right now? | `get_realtime_supported_chains` |
 | Anything before writing SQL | `sql-optimization` |
 | Dashboard or chart mechanics | `dashboard-design`, `explorer-visuals` (fetched live) |
 
